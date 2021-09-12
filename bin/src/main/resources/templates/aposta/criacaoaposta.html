@@ -1,0 +1,70 @@
+<html>
+<head th:replace="~{fragment :: head}"></head>
+<body>
+<div th:replace="~{fragment :: menu}"></div>
+	<div class="container">
+		<div th:replace= "~{fragment :: titulo('Criacao de aposta')}"></div>
+		<div class="card mt-3">
+		<h3> 
+		Note que os valores 0 serao ignorados, <br> 
+		Voce deve escolher a quantidade entre 6 e 10, <br> 
+		e os valores de 1 ate 60</h3>
+			<form class="card-body" th:action="@{/sorteio/{id}/formularioaposta/(id=${sorteio.numeroDoSorteio})}" method="POST">
+				<h3>Digite seus valores: </h3>
+				<div class="form-group mt-3">
+					<label>Valor</label> 
+					<input th:name="num1" value=0 >
+				</div>
+				
+				<div class="form-group mt-3">
+					<label>Valor</label> 
+					<input th:name="num2" value=0 > 
+				</div>
+				
+				<div class="form-group mt-3">
+					<label>Valor</label> 
+					<input th:name="num3" value=0 > 
+				</div>
+				
+				<div class="form-group mt-3">
+					<label>Valor</label> 
+					<input th:name="num4" value=0 > 
+				</div>
+				
+				<div class="form-group mt-3">
+					<label>Valor</label> 
+					<input th:name="num5" value=0 > 
+				</div>
+				
+				<div class="form-group mt-3">
+					<label>Valor</label> 
+					<input th:name="num6" value=0> 
+				</div>
+								
+				<div class="form-group mt-3">
+					<label>Valor</label> 
+					<input th:name="num7" value=0 > 
+				</div>
+				
+				<div class="form-group mt-3">
+					<label>Valor</label> 
+					<input th:name="num8" value=0> 
+				</div>
+				
+								
+				<div class="form-group mt-3">
+					<label>Valor</label> 
+					<input th:name="num9" value=0 > 
+				</div>
+				
+				<div class="form-group mt-3">
+					<label>Valor</label> 
+					<input th:name="num10" value=0> 
+				</div>
+
+				<button class="btn btn-success mt-3" type="submit">Apostar</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

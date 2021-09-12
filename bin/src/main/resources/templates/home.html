@@ -1,0 +1,37 @@
+<html>
+	<head th:replace="~{fragment :: head}"></head>
+	<body>
+	<div th:replace="~{fragment :: menu}"></div>
+		<div class="container">
+			<div th:replace= "~{fragment :: titulo('Sorteios')}"></div>
+			<nav class="navbar navbar-expand navbar-light bg-light d-flex justify-content-between mb-3">
+			 <div class="navbar-nav">
+				<a class="nav-item nav-link active" href="">Todos</a>
+				<a class="nav-item nav-link" href="">Participando</a>
+			</div>
+				<a href="sorteio/criacao"><button class="btn btn-outline-success my-2 my-sm-0">Novo</button></a>
+			</nav>
+			<div class="card mb-3" th:each="sorteio : ${sorteios}">
+					<div class="card-header">sorteio número <span th:text="${sorteio.numeroDoSorteio}"></span></div>
+					<div class="card-body">
+						<div class="row">
+						<div class="col-12 col-sm-9 mb-3">
+							<div >valor do prêmio: <span th:text="${sorteio.valorDoPremio}"></span></div>
+							<div >Data do fim do sorteio: <span th:text="${sorteio.dataParaFim}"></span></div>
+							<div >Status: <span th:text="${sorteio.status}"></span></div>
+							<div th:if="${sorteio.foiSorteado} == true">sorteados:<span th:text="${sorteio.DezenasSorteadas}"></span></div>
+						</div>
+						<div class="col-12 col-sm-3">
+						<a th:href="@{/sorteio/{id}/apostas/(id=${sorteio.numeroDoSorteio})}">
+							<button   type="submit" class="btn btn-success">Participar</button>
+						</a>
+						</div>
+					</div>
+			 	</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+	
+	

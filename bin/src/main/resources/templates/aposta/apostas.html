@@ -1,0 +1,31 @@
+<html>
+	<head th:replace="~{fragment :: head}"></head>
+	<body>
+	<div th:replace="~{fragment :: menu}"></div>
+		<div class="container">
+			<div th:replace= "~{fragment :: titulo('Apostas')}">
+			</div>
+			<form th:object="${sorteio}" class="card-body" th:action="@{/sorteio/{id}/sortearaposta/(id=${sorteio.numeroDoSorteio})}" method="POST">
+				<button type= "submit"><i class="fas fa-dice"></i></button>
+			</form>
+			<div th:if="${sorteio.foiSorteado} == true" > O resultado foi: <div th:text="${sorteio.dezenasSorteadas}">resultado</div></div>
+			<div class="card mb-3 mt-3" th:each="aposta : ${apostas}">
+					<div class="card-header">Aposta de número:  <span th:text="${aposta.id}"></span></div>
+					<div class="card-body">
+						<div class="row">
+						<div class="col-12 col-sm-9 mb-3">
+							<div >Números apostas: <span th:text="${aposta.numeros}"></span></div>
+							<div >Status: <span th:text="${aposta.status}"></span></div>
+						
+						</div>
+						<div class="col-12 col-sm-3">
+						</div>
+					</div>
+			 	</div>
+			</div>
+			<a th:if ="${sorteio.foiSorteado == false}" th:href="@{/sorteio/{id}/formularioaposta/(id=${sorteio.numeroDoSorteio})}">
+				<button  type="submit" class="btn btn-success mt-3">Apostar</button>
+			</a>
+		</div>
+	</body>
+</html>
