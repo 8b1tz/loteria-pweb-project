@@ -139,6 +139,7 @@ public class ApostaController {
 			}
 		}
 
+		aposta.setStatus(StatusAposta.PARTICIPANDO) ;
 		apostaRepository.save(aposta);
 		sorteio.adicionarAposta(aposta);
 		sorteioRepository.save(sorteio);
