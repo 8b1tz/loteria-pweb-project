@@ -1,0 +1,66 @@
+<html>
+<head th:replace="~{fragment :: head}"></head>
+<body>
+<div th:replace="~{fragment :: menu}"></div>
+	<div class="container">
+		<div th:replace= "~{fragment :: titulo('Criacao de aposta')}"></div>
+		<div class="card mt-3">
+		<form form  class="card-body" th:action="@{/sorteio/{id}/criaraposta/(id=${sorteio.numeroDoSorteio})}" method="POST">
+				<h3>Digite seus valores: </h3>
+				<div class="form-group mt-3">
+					<label>1° Numero: </label> 
+					<input th:name="num1" value=0 >
+				</div>
+				
+				<div class="form-group mt-3">
+					<label>2° Numero: </label> 
+					<input th:name="num2" value=0 > 
+				</div>
+				
+				<div class="form-group mt-3">
+					<label>3° Numero: </label> 
+					<input th:name="num3" value=0 > 
+				</div>
+				
+				<div class="form-group mt-3">
+					<label>4° Numero: </label> 
+					<input th:name="num4" value=0 > 
+				</div>
+				
+				<div class="form-group mt-3">
+					<label>5° Numero:</label> 
+					<input th:name="num5" value=0 > 
+				</div>
+				
+				<div  class="form-group mt-3">
+					<label>6° Numero: </label> 
+					<input th:name="num6" value=0> 
+				</div>
+								
+				<div th:if="${quantidade} >= 7" class="form-group mt-3">
+					<label>7° Numero: </label> 
+					<input th:name="num7" value=0 > 
+				</div>
+				
+				<div th:if="${quantidade} >= 8" class="form-group mt-3">
+					<label>8° Numero: </label> 
+					<input th:name="num8" value=0> 
+				</div>
+				
+								
+				<div th:if="${quantidade} >= 9" class="form-group mt-3">
+					<label>9° Numero:</label> 
+					<input th:name="num9" value=0 > 
+				</div>
+				
+				<div th:if="${quantidade} >= 10"class="form-group mt-3">
+					<label>10° Numero:</label> 
+					<input th:name="num10" value=0> 
+				</div>
+
+				<button class="btn btn-success mt-3" type="submit">Apostar</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

@@ -33,6 +33,9 @@ public class Aposta {
 	@Enumerated(EnumType.STRING)
 	private StatusAposta status;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Usuario usuario;
+	
 	@ElementCollection
 	private List<Integer> numeros = new ArrayList<>();
 
@@ -43,6 +46,22 @@ public class Aposta {
 
 	public Aposta() {
 
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setNumeros(List<Integer> numeros) {
+		this.numeros = numeros;
 	}
 
 	public Integer getId() {

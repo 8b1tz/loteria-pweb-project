@@ -15,8 +15,12 @@
 
 
 <div th:fragment="menu" class="logo-container bg-success text-light mb-3 p-3 d-flex justify-content-between">
-		<a th:href="@{/home}"><span class ="logotipo">Loteria</span></a>
-		<span class= "mt-3">Login</span>
+		<a class="text-light" th:href="@{/home}"><span class ="logotipo">Loteria</span></a>
+		<span class= "mt-3">
+			<a  th:href="@{/login}" sec:authorize="!isAuthenticated()" class="text-light">Login</a>
+			<a onclick="document.querySelector('#form-login').submit()" sec:authorize="isAuthenticated()" class = "text-light" href="#">Logout</a>
+		<form id="form-login" th:action="@{/logout}" method="post"></form>
+		</span>
 	</div>
 	
 <div th:fragment="titulo(valor)" class="container-fluid bg-success text-light p-5">

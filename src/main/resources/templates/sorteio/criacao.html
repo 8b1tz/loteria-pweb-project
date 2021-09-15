@@ -5,7 +5,7 @@
 	<div class="container">
 		<div th:replace= "~{fragment :: titulo('Criação de sorteio')}"></div>
 		<div class="card mt-3">
-			<form th:object="${sorteio}" class="card-body" action="/sorteio/criar" method="POST">
+			<form th:object="${sorteio}" class="card-body" th:action="@{criar}" method="POST">
 				<div class="form-group mt-3">
 					<label>Valor</label> <input th:field="*{valorDoPremio}" th:error:class="is-invalid" class="form-control"
 						placeholder="valor do prêmio"> 

@@ -7,10 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import br.edu.ifpb.loteriapweb.enums.StatusAposta;
 import br.edu.ifpb.loteriapweb.enums.StatusSorteio;
 import br.edu.ifpb.loteriapweb.model.Sorteio;
 import br.edu.ifpb.loteriapweb.repository.SorteioRepository;
@@ -25,7 +23,7 @@ public class SorteioController {
 
 	@GetMapping("sorteio/criacao")
 	public ModelAndView formulario(Sorteio sorteio, ModelAndView mv) {
-		mv.setViewName(null);
+		
 		return mv;
 	}
 
@@ -33,9 +31,7 @@ public class SorteioController {
 	public ModelAndView criar(@Valid Sorteio sorteio, BindingResult resultadoValidacao, ModelAndView mv) {
 		if (resultadoValidacao.hasErrors()) {
 			mv.addObject("sorteio", sorteio);
-			mv.setViewName("sorteio/criacao");
-			System.out.println(resultadoValidacao.getAllErrors());
-			
+			mv.setViewName("sorteio/criacao");			
 		} else {
 			sorteio.setStatus(StatusSorteio.ABERTO);
 			sorteioRepository.save(sorteio);

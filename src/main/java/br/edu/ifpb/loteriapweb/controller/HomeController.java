@@ -1,5 +1,7 @@
 package br.edu.ifpb.loteriapweb.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import br.edu.ifpb.loteriapweb.enums.StatusSorteio;
 import br.edu.ifpb.loteriapweb.repository.SorteioRepository;
@@ -20,8 +21,9 @@ public class HomeController {
 	private SorteioRepository sorteioRepository;
 
 	@GetMapping
-	public String home(Model m) {
+	public String home(Model m, Principal principal) {
 		m.addAttribute("sorteios", sorteioRepository.findAll());
+		m.addAttribute("usuario", principal);
 		return "home";
 	}
 
