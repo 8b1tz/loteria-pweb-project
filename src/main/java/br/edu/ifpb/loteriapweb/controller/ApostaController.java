@@ -1,14 +1,15 @@
 package br.edu.ifpb.loteriapweb.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,14 +19,18 @@ import br.edu.ifpb.loteriapweb.enums.StatusAposta;
 import br.edu.ifpb.loteriapweb.enums.StatusSorteio;
 import br.edu.ifpb.loteriapweb.model.Aposta;
 import br.edu.ifpb.loteriapweb.model.Sorteio;
+import br.edu.ifpb.loteriapweb.model.Usuario;
 import br.edu.ifpb.loteriapweb.repository.ApostaRepository;
 import br.edu.ifpb.loteriapweb.repository.SorteioRepository;
+import br.edu.ifpb.loteriapweb.repository.UsuarioRepository;
 
 @Controller
 public class ApostaController {
 
 	private static Integer quantidade = 0;
 
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 	@Autowired
 	private SorteioRepository sorteioRepository;
 
@@ -86,7 +91,7 @@ public class ApostaController {
 	@RequestMapping(value = "sorteio/{idsorteio}/criaraposta", method = RequestMethod.POST)
 	public String saveaposta(@PathVariable Integer idsorteio, ModelAndView model, Integer num1, Integer num2,
 			Integer num3, Integer num4, Integer num5, Integer num6, Integer num7, Integer num8, Integer num9,
-			Integer num10) {
+			Integer num10, Principal principal) {
 
 		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
 
@@ -138,12 +143,13 @@ public class ApostaController {
 				return "redirect:/home";
 			}
 		}
-
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Usuario usuario = usuarioRepository.findByUsername(username);
+		aposta.setUsuario(usuario);
 		aposta.setStatus(StatusAposta.PARTICIPANDO) ;
 		apostaRepository.save(aposta);
 		sorteio.adicionarAposta(aposta);
 		sorteioRepository.save(sorteio);
-
 		return "redirect:/home";
 	}
 

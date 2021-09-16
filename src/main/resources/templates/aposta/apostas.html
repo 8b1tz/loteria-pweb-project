@@ -22,8 +22,8 @@
 		<form class="card-body"
 			th:action="@{/sorteio/{id}/sortearaposta/(id=${sorteio.numeroDoSorteio})}"
 			method="POST">
-			<button type="submit">
-				<i class="fas fa-dice"></i>
+			<button th:if="${sorteio.status == 'ABERTO'}"class="btn btn-success" sec:authorize="hasRole('ROLE_ADMIN')" type="submit">
+				Sortear
 			</button>
 		</form>
 		<div th:if="${sorteio.foiSorteado} == true">
@@ -48,6 +48,9 @@
 							Números apostas: <span th:text="${aposta.numeros}"></span>
 						</div>
 						<div>
+							Quem apostou: <span th:text="${aposta.usuario.username}"></span>
+						</div>
+						<div>
 							Status: <span th:text="${aposta.status}"></span>
 						</div>
 
@@ -58,7 +61,7 @@
 		</div>
 		<a th:if="${sorteio.foiSorteado == false}"
 			th:href="@{/sorteio/{id}/formularioaposta/(id=${sorteio.numeroDoSorteio})}">
-			<button type="submit" class="btn btn-success mt-3">Apostar</button>
+			<button sec:authorize="hasRole('ROLE_USER')" type="submit" class="btn btn-success mt-3">Apostar</button>
 		</a>
 	</div>
 </body>

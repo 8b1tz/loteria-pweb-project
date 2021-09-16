@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import br.edu.ifpb.loteriapweb.model.Funcao;
 import br.edu.ifpb.loteriapweb.model.Usuario;
 import br.edu.ifpb.loteriapweb.repository.UsuarioRepository;
 

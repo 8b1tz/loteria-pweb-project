@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 public class Funcao {
 	
 	@Id
@@ -20,7 +20,6 @@ public class Funcao {
 	}
 
 	public Funcao(String name) {
-	
 		this.name = name;
 	}
 

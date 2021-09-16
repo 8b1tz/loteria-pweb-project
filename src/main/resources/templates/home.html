@@ -10,7 +10,7 @@
 				<a th:classappend="${status} == 'aberto' ? 'active'" class="nav-item nav-link" href="/home/aberto">Abertos</a>
 				<a th:classappend="${status} == 'fechado' ? 'active'"class="nav-item nav-link" href="/home/fechado">Fechados</a>
 			</div>
-				<a href="sorteio/criacao"><button class="btn btn-outline-success my-2 my-sm-0">Novo</button></a>
+				<a sec:authorize="hasRole('ROLE_ADMIN')" href="sorteio/criacao"><button class="btn btn-outline-success my-2 my-sm-0">Novo</button></a>
 			</nav>
 			
 			<div class="card mb-3" th:each="sorteio : ${sorteios}">

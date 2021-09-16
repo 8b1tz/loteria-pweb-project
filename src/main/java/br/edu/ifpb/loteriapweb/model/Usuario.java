@@ -16,10 +16,16 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import br.edu.ifpb.loteriapweb.repository.FuncaoRepository;
+
 @Entity
 @Table(name = "user")
 public class Usuario {
 
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -81,6 +87,7 @@ public class Usuario {
 	}
 
 	public void adicionarFuncao(Funcao role) {
+		
 		funcao.add(role);
 	}
 
