@@ -19,10 +19,8 @@
 					th:href="@{/sorteio/{id}/apostas/perdeu(id=${sorteio.numeroDoSorteio})}">Perdeu</a>
 			</div>
 		</nav>
-		<form class="card-body"
-			th:action="@{/sorteio/{id}/sortearaposta/(id=${sorteio.numeroDoSorteio})}"
-			method="POST">
-			<button th:if="${sorteio.status == 'ABERTO'}"class="btn btn-success" sec:authorize="hasRole('ROLE_ADMIN')" type="submit">
+		<form class="card-body" th:action="@{/sorteio/{id}/sortearaposta/(id=${sorteio.numeroDoSorteio})}" method="POST">
+			<button th:if="${#strings.toString(sorteio.status)} == 'ABERTO'" class="btn btn-success" sec:authorize="hasRole('ROLE_ADMIN')" type="submit">
 				Sortear
 			</button>
 		</form>
@@ -34,7 +32,7 @@
 
 			<th:block th:switch="${#strings.toString(aposta.status)}">
 				<div th:case="'GANHOU'" class="card-header alert-success">
-					Aposta de número: <span th:text="${aposta.id}"></span>
+					Aposta de número: <span name="id" th:text="${aposta.id}"></span>
 				</div>
 				<div th:case="'PERDEU'" class="card-header alert-danger">
 					Aposta de número: <span th:text="${aposta.id}"></span>
@@ -54,8 +52,7 @@
 							Status: <span th:text="${aposta.status}"></span>
 						</div>
 
-					</div>
-					<div class="col-12 col-sm-3"></div>
+					</div>	
 				</div>
 			</div>
 		</div>

@@ -125,7 +125,7 @@ public class ApostaController {
 
 				if ((numeros.get(i) <= 60) && (numeros.get(i) >= 1)) {
 					if ((numeros.get(i) == numeros.get(j)) && (i != j)) {
-						return "redirect:/home";
+						return "redirect:/sorteio/"+idsorteio+"/apostas";
 					}
 				}
 
@@ -140,7 +140,7 @@ public class ApostaController {
 			if (numerosValidos.size() >= 6 && numerosValidos.size() <= 10) {
 				aposta.adicionarNumero(numerosValidos.get(i));
 			} else {
-				return "redirect:/home";
+				return "redirect:/sorteio/"+idsorteio+"/apostas";
 			}
 		}
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -150,7 +150,7 @@ public class ApostaController {
 		apostaRepository.save(aposta);
 		sorteio.adicionarAposta(aposta);
 		sorteioRepository.save(sorteio);
-		return "redirect:/home";
+		return "redirect:/sorteio/"+idsorteio+"/apostas";
 	}
 
 	@RequestMapping(value = "sorteio/{idsorteio}/sortearaposta", method = RequestMethod.POST)

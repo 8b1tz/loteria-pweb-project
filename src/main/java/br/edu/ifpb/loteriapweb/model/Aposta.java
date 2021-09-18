@@ -13,11 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import br.edu.ifpb.loteriapweb.enums.StatusAposta;
-import br.edu.ifpb.loteriapweb.enums.StatusSorteio;
 
 @Entity
 public class Aposta {
@@ -29,13 +25,22 @@ public class Aposta {
 	@ManyToOne(fetch = FetchType.EAGER)
 
 	private Sorteio sorteio;
-	
+	private Boolean isFavorito;
+
+	public Boolean getIsFavorito() {
+		return isFavorito;
+	}
+
+	public void setIsFavorito(Boolean isFavorito) {
+		this.isFavorito = isFavorito;
+	}
+
 	@Enumerated(EnumType.STRING)
 	private StatusAposta status;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Usuario usuario;
-	
+
 	@ElementCollection
 	private List<Integer> numeros = new ArrayList<>();
 
@@ -75,7 +80,7 @@ public class Aposta {
 	public void removerNumero(Integer numero) {
 		numeros.remove(numero);
 	}
-	
+
 	public Sorteio getSorteio() {
 		return sorteio;
 	}
@@ -87,7 +92,6 @@ public class Aposta {
 	public List<Integer> getNumeros() {
 		return numeros;
 	}
-	
 
 	public StatusAposta getStatus() {
 		return status;

@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,10 +19,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import br.edu.ifpb.loteriapweb.repository.FuncaoRepository;
-
 @Entity
 @Table(name = "user")
 public class Usuario {
@@ -29,7 +28,11 @@ public class Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-
+	
+	@ElementCollection
+	@Column(nullable = false)
+	private List<Aposta> apostasFavoritas = new ArrayList<>();
+	
 	private String username;
 	private String password;
 	private String email;
@@ -78,6 +81,17 @@ public class Usuario {
 		return email;
 	}
 
+	public List<Aposta> getApostasFavoritas() {
+		return apostasFavoritas;
+	}
+
+	public void adicionarApostasFavoritas(Aposta aposta) {
+		this.apostasFavoritas.add(aposta);
+	}
+
+	public void removerApostasFavoritas(Aposta aposta) {
+		this.apostasFavoritas.remove(aposta);
+	}
 	public void setEmail(String email) {
 		this.email = email;
 	}

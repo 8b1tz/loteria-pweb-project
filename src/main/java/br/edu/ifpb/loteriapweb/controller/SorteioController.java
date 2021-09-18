@@ -23,7 +23,6 @@ public class SorteioController {
 
 	@GetMapping("sorteio/criacao")
 	public ModelAndView formulario(Sorteio sorteio, ModelAndView mv) {
-		
 		return mv;
 	}
 
