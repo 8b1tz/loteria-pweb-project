@@ -6,15 +6,10 @@
 		<div th:replace= "~{fragment :: titulo('Criacao de aposta')}"></div>
 		<div class="card mt-3">
 			<form class="card-body" th:action="@{/sorteio/{id}/numerossorteio/(id=${sorteio.numeroDoSorteio})}" method="POST">
-			
-				
 				<div class="form-group mt-3">
 					<label>Quantidade de numeros para apostar</label> 
 					<input th:name="quantidadeform" value=0 > 
-				</div>
-				<span th:text = "${quantidade}"></span>
-				<div>
-				<button class="btn btn-success mt-3" type="submit">Next</button>
+					<button class="btn btn-success mt-3" type="submit">Next</button>
 				</div>
 			</form>
 		</div>

@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -18,6 +17,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "user")
@@ -33,8 +34,14 @@ public class Usuario {
 	@Column(nullable = false)
 	private List<Aposta> apostasFavoritas = new ArrayList<>();
 	
+	@NotBlank(message="Campo obrigatório!")
 	private String username;
+	
+	@NotBlank(message="Campo obrigatório!")
 	private String password;
+	
+	@NotBlank(message="Campo obrigatório!")
+	@Email(message="Informe um email válido!")
 	private String email;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

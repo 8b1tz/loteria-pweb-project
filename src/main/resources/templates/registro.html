@@ -6,24 +6,24 @@
 		
 		<div th:replace= "~{fragment :: titulo('Registro')}"></div>
 		<div class="card mt-3">
-			<form th:action="@{/registro}" class="card-body" method="POST">
+			<form th:action="@{/registro}" th:object="${usuario}" class="card-body" method="POST">
 				
 				<div class="form-group mt-3">
-					<label>Username: </label> <input name="username" required autofocus="autofocus" class="form-control"
-						placeholder="seu nome de usuário"> 
+					<label>Username: </label> <input th:field="*{username}" th:errorClass="is-invalid" class="form-control"placeholder="seu nome de usuï¿½rio"> 
+					<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="invalid-feedback" ></span>
 				</div>
 				<div class="form-group mt-3">
-					<label>Senha: </label> <input name="password"  required autofocus="autofocus" class="form-control" 
-						placeholder="sua senha"> 
+					<label>Senha: </label> <input th:field="*{password}"th:errorClass="is-invalid"  class="form-control" placeholder="sua senha"> 
+					<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback" ></span>
 				</div>
 				
 				<div class="form-group mt-3">
-					<label>Email: </label> <input name="email" required autofocus="autofocus" class="form-control" 
-						placeholder="seu email"> 
+					<label>Email: </label> <input th:field="*{email}"th:errorClass="is-invalid"  class="form-control" placeholder="seu email"> 
+					<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback" ></span>
 				</div>
 				
 				<button class="btn btn-success mt-3" type="submit">Registrar</button>
-				<span>Já está registrado? <a href="/" th:href="@{/login}">Logue aqui!</a></span>
+				<span>JÃ¡ estÃ¡ registrado? <a href="/" th:href="@{/login}">Logue aqui!</a></span>
 			</form>
 		</div>
 	</div>

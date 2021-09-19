@@ -20,24 +20,20 @@ public class SorteioController {
 	@Autowired
 	private SorteioRepository sorteioRepository;
 
-
 	@GetMapping("sorteio/criacao")
 	public ModelAndView formulario(Sorteio sorteio, ModelAndView mv) {
 		return mv;
 	}
 
 	@PostMapping("sorteio/criar")
-	public ModelAndView criar(@Valid Sorteio sorteio, BindingResult resultadoValidacao, ModelAndView mv) {
+	public String criar(@Valid Sorteio sorteio, BindingResult resultadoValidacao, ModelAndView mv) {
 		if (resultadoValidacao.hasErrors()) {
-			mv.addObject("sorteio", sorteio);
-			mv.setViewName("sorteio/criacao");			
-		} else {
-			sorteio.setStatus(StatusSorteio.ABERTO);
-			sorteioRepository.save(sorteio);
-			mv.setViewName("redirect:/home");
+			return "sorteio/criacao";
 		}
-		return mv;
-	}	
-	
-	
+		sorteio.setStatus(StatusSorteio.ABERTO);
+		sorteioRepository.save(sorteio);
+		return "redirect:/home";
+
+	}
+
 }

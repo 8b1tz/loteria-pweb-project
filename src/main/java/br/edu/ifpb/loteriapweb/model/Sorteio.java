@@ -16,10 +16,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import br.edu.ifpb.loteriapweb.enums.StatusSorteio;
 
@@ -29,15 +29,19 @@ public class Sorteio {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer numeroDoSorteio;
+	
 	private boolean foiSorteado;
-	@NotBlank(message = "Campo obrigatório")
+	
+	@NotNull(message = "Campo obrigatório")
 	@Positive(message = "Precisa ser um valor positivo")
 	private Double valorDoPremio;
 
 	@OneToMany(mappedBy = "sorteio", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-
 	private List<Aposta> apostas = new ArrayList<>();
-
+	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Future(message="Data deve ser futura!")
+	@NotNull(message="Campo obrigatório!")
 	private LocalDate dataParaFim;
 
 	@ElementCollection

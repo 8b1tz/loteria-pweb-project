@@ -2,11 +2,14 @@ package br.edu.ifpb.loteriapweb.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,16 +31,16 @@ public class UsuarioController {
 	private UsuarioRepository usuarioRepository;
 	
 	@GetMapping("registro")
-	public String show(Model model) {
+	public String show(Model model, Usuario usuario) {
 		return "registro";
 	}
 	
 	@PostMapping("registro")
-	public String save(String username, String password, String email) {
-		Usuario usuario = new Usuario();
-		usuario.setUsername(username);
-		usuario.setPassword(passwordEncoder.encode(password));
-		usuario.setEmail(email);
+	public String save(@Valid Usuario usuario, BindingResult resultadoValidacao) {
+		if (resultadoValidacao.hasErrors()) {
+			return "registro";
+		}
+		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 		usuarioRepository.save(usuario);
 		return "redirect:/home";
 	}
@@ -63,7 +66,6 @@ public class UsuarioController {
 			String username = SecurityContextHolder.getContext().getAuthentication().getName();
 			Usuario usuario = usuarioRepository.findByUsername(username);
 			Aposta apostinha = apostaRepository.getById(idaposta);
-			System.out.println(idaposta);
 			
 			if(usuario.getApostasFavoritas().contains(apostinha)) {
 				usuario.removerApostasFavoritas(apostinha);

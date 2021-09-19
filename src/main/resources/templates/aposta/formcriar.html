@@ -8,53 +8,52 @@
 		<form form  class="card-body" th:action="@{/sorteio/{id}/criaraposta/(id=${sorteio.numeroDoSorteio})}" method="POST">
 				<h3>Digite seus valores: </h3>
 				<div class="form-group mt-3">
-					<label>1� Numero: </label> 
+					<label>1° Número: </label> 
 					<input th:name="num1" value=0 >
 				</div>
 				
 				<div class="form-group mt-3">
-					<label>2� Numero: </label> 
+					<label>2° Número: </label> 
 					<input th:name="num2" value=0 > 
 				</div>
 				
 				<div class="form-group mt-3">
-					<label>3� Numero: </label> 
+					<label>3° Número: </label> 
 					<input th:name="num3" value=0 > 
 				</div>
 				
 				<div class="form-group mt-3">
-					<label>4� Numero: </label> 
+					<label>4° Número: </label> 
 					<input th:name="num4" value=0 > 
 				</div>
 				
 				<div class="form-group mt-3">
-					<label>5� Numero:</label> 
+					<label>5° Número:</label> 
 					<input th:name="num5" value=0 > 
 				</div>
 				
 				<div  class="form-group mt-3">
-					<label>6� Numero: </label> 
+					<label>6° Número: </label> 
 					<input th:name="num6" value=0> 
 				</div>
 								
 				<div th:if="${quantidade} >= 7" class="form-group mt-3">
-					<label>7� Numero: </label> 
+					<label>7° Número: </label> 
 					<input th:name="num7" value=0 > 
 				</div>
 				
 				<div th:if="${quantidade} >= 8" class="form-group mt-3">
-					<label>8� Numero: </label> 
+					<label>8° Número: </label> 
 					<input th:name="num8" value=0> 
 				</div>
-				
 								
 				<div th:if="${quantidade} >= 9" class="form-group mt-3">
-					<label>9� Numero:</label> 
+					<label>9° Número:</label> 
 					<input th:name="num9" value=0 > 
 				</div>
 				
 				<div th:if="${quantidade} >= 10"class="form-group mt-3">
-					<label>10� Numero:</label> 
+					<label>10° Número:</label> 
 					<input th:name="num10" value=0> 
 				</div>
 
