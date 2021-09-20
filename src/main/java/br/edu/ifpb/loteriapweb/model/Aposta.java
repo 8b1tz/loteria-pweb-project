@@ -25,7 +25,7 @@ public class Aposta {
 	@ManyToOne(fetch = FetchType.EAGER)
 
 	private Sorteio sorteio;
-	private Boolean isFavorito;
+	private Boolean isFavorito = false;
 
 	public Boolean getIsFavorito() {
 		return isFavorito;

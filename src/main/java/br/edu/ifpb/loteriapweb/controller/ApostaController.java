@@ -38,11 +38,12 @@ public class ApostaController {
 	private ApostaRepository apostaRepository;
 
 	@RequestMapping(value = "sorteio/{idsorteio}/apostas", method = RequestMethod.GET)
-	public ModelAndView findById(@PathVariable Integer idsorteio, ModelAndView mv) {
+	public ModelAndView findById(@PathVariable Integer idsorteio, ModelAndView mv, Principal principal) {
 
 		mv.setViewName("aposta/apostas");
 		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
-
+		Usuario usuario = usuarioRepository.findByUsername(principal.getName());
+		mv.addObject(usuario);
 		List<Aposta> apostas = sorteio.getApostas();
 		mv.addObject("apostas", apostas);
 		mv.addObject("sorteio", sorteio);
@@ -51,13 +52,14 @@ public class ApostaController {
 	}
 
 	@RequestMapping("sorteio/{idsorteio}/apostas/{status}")
-	public String aberto(@PathVariable Integer idsorteio, @PathVariable String status, Model m) {
+	public String aberto(@PathVariable Integer idsorteio, @PathVariable String status, Model m, Principal principal) {
 
 		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
 		List<Aposta> apostas = sorteio.getApostas();
 		List<Aposta> apostasFiltradas = apostas.stream().filter(a -> a.getStatus().name().toLowerCase().equals(status))
 				.toList();
-
+		Usuario usuario = usuarioRepository.findByUsername(principal.getName());
+		m.addAttribute("usuario", usuario);
 		m.addAttribute("sorteio", sorteio);
 		m.addAttribute("apostas", apostasFiltradas);
 		m.addAttribute("status", status);
@@ -66,19 +68,21 @@ public class ApostaController {
 	}
 
 	@RequestMapping(value = "sorteio/{idsorteio}/formularioaposta", method = RequestMethod.GET)
-	public ModelAndView formaposta(@PathVariable Integer idsorteio, ModelAndView mv) {
-
+	public ModelAndView formaposta(@PathVariable Integer idsorteio, ModelAndView mv, Principal principal) {
 		mv.setViewName("aposta/criacaoaposta");
 		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
-
+		Usuario usuario = usuarioRepository.findByUsername(principal.getName());
+		mv.addObject(usuario);
 		mv.addObject("sorteio", sorteio);
 
 		return mv;
 	}
 
 	@RequestMapping(value = "sorteio/{idsorteio}/numerossorteio", method = RequestMethod.POST)
-	public ModelAndView quantidade(@PathVariable Integer idsorteio, ModelAndView mv, Integer quantidadeform) {
-
+	public ModelAndView quantidade(@PathVariable Integer idsorteio, ModelAndView mv, Integer quantidadeform,
+			Principal principal) {
+		Usuario usuario = usuarioRepository.findByUsername(principal.getName());
+		mv.addObject(usuario);
 		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
 		mv.addObject("sorteio", sorteio);
 		quantidade = quantidadeform;
@@ -92,32 +96,48 @@ public class ApostaController {
 	public String saveaposta(@PathVariable Integer idsorteio, ModelAndView model, Integer num1, Integer num2,
 			Integer num3, Integer num4, Integer num5, Integer num6, Integer num7, Integer num8, Integer num9,
 			Integer num10, Principal principal) {
-
+		Double pagamento = 0.0;
 		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
 
 		Aposta aposta = new Aposta();
 		aposta.setSorteio(sorteio);
 		ArrayList<Integer> numeros = new ArrayList();
 		ArrayList<Integer> numerosValidos = new ArrayList();
-
+		Usuario usuario = usuarioRepository.findByUsername(principal.getName());
+		model.addObject(usuario);
 		numeros.add(num1);
 		numeros.add(num2);
 		numeros.add(num3);
 		numeros.add(num4);
 		numeros.add(num5);
 		numeros.add(num6);
-
+		
+		if (quantidade == 6) {
+			usuario.setDinheiro(usuario.getDinheiro() - 3.00);
+		}
 		if (quantidade >= 7) {
 			numeros.add(num7);
+			if (quantidade == 7) {
+				usuario.setDinheiro(usuario.getDinheiro() - 15.00);
+			}
 		}
 		if (quantidade >= 8) {
 			numeros.add(num8);
+			if (quantidade == 8) {
+				usuario.setDinheiro(usuario.getDinheiro() - 90.00);
+			}
 		}
 		if (quantidade >= 9) {
 			numeros.add(num9);
+			if (quantidade == 7) {
+				usuario.setDinheiro(usuario.getDinheiro() - 300.00);
+			}
 		}
 		if (quantidade == 10) {
 			numeros.add(num10);
+			if (quantidade == 7) {
+				usuario.setDinheiro(usuario.getDinheiro() - 1500.00);
+			}
 		}
 		for (int i = 0; i < numeros.size(); i++) {
 
@@ -125,7 +145,7 @@ public class ApostaController {
 
 				if ((numeros.get(i) <= 60) && (numeros.get(i) >= 1)) {
 					if ((numeros.get(i) == numeros.get(j)) && (i != j)) {
-						return "redirect:/sorteio/"+idsorteio+"/apostas";
+						return "redirect:/sorteio/" + idsorteio + "/apostas";
 					}
 				}
 
@@ -140,17 +160,17 @@ public class ApostaController {
 			if (numerosValidos.size() >= 6 && numerosValidos.size() <= 10) {
 				aposta.adicionarNumero(numerosValidos.get(i));
 			} else {
-				return "redirect:/sorteio/"+idsorteio+"/apostas";
+				return "redirect:/sorteio/" + idsorteio + "/apostas";
 			}
 		}
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		Usuario usuario = usuarioRepository.findByUsername(username);
+		model.addObject(usuario);
+
 		aposta.setUsuario(usuario);
-		aposta.setStatus(StatusAposta.PARTICIPANDO) ;
+		aposta.setStatus(StatusAposta.PARTICIPANDO);
 		apostaRepository.save(aposta);
 		sorteio.adicionarAposta(aposta);
 		sorteioRepository.save(sorteio);
-		return "redirect:/sorteio/"+idsorteio+"/apostas";
+		return "redirect:/sorteio/" + idsorteio + "/apostas";
 	}
 
 	@RequestMapping(value = "sorteio/{idsorteio}/sortearaposta", method = RequestMethod.POST)
@@ -182,6 +202,8 @@ public class ApostaController {
 
 			if (acertos >= 6) {
 				apostas.get(i).setStatus(StatusAposta.GANHOU);
+				apostas.get(i).getUsuario().setDinheiro(
+						apostas.get(i).getUsuario().getDinheiro() + apostas.get(i).getSorteio().getValorDoPremio());
 			} else {
 				apostas.get(i).setStatus(StatusAposta.PERDEU);
 			}
@@ -203,7 +225,7 @@ public class ApostaController {
 	public String onError() {
 		return "redirect:/apostas/aposta";
 	}
-	
+
 	@ExceptionHandler(NullPointerException.class)
 	public String onError2() {
 		return "redirect:/apostas/aposta";

@@ -6,6 +6,38 @@
 		<div th:replace= "~{fragment :: titulo('Criacao de aposta')}"></div>
 		<div class="card mt-3">
 			<form class="card-body" th:action="@{/sorteio/{id}/numerossorteio/(id=${sorteio.numeroDoSorteio})}" method="POST">
+				<table class="table table-striped">
+  <thead>
+  Tabela de preços:
+    <tr>
+      <th scope="col">Número de Dezenas</th>
+      <th scope="col">Preço</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">6</th>
+      	<td>R$ 3,00</td>
+    </tr>
+	<tr>
+      <th scope="row">7</th>
+      	<td>R$ 15,00</td>
+    </tr>
+    <tr>
+      <th scope="row">8</th>
+      	<td>R$ 90,00</td>
+    </tr>
+    <tr>
+      <th scope="row">9</th>
+      	<td>R$ 300,00</td>
+    </tr>
+    <tr>
+      <th scope="row">10</th>
+      	<td>R$ 1500,00</td>
+    </tr>
+  </tbody>
+</table>
+				
 				<div class="form-group mt-3">
 					<label>Quantidade de numeros para apostar</label> 
 					<input th:name="quantidadeform" value=0 > 

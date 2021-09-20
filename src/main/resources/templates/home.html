@@ -23,7 +23,7 @@
 					<div class="card-body">
 						<div class="row">
 						<div class="col-12 col-sm-9 mb-3">
-							<div >valor do prêmio: <span th:text="${sorteio.valorDoPremio}"></span></div>
+							<div >valor do prêmio: <span th:text="${#numbers.formatCurrency(sorteio.valorDoPremio)}"></span></div>
 							<div >Data do fim do sorteio: <span th:text="${sorteio.dataParaFim}"></span></div>
 							<div >Status: <span th:text="${sorteio.status}"></span></div>
 							<div th:if="${sorteio.foiSorteado} == true">sorteados:<span th:text="${sorteio.DezenasSorteadas}"></span></div>

@@ -24,33 +24,28 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "user")
 public class Usuario {
 
-	
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
+	private Double dinheiro;
+
 	@ElementCollection
 	@Column(nullable = false)
 	private List<Aposta> apostasFavoritas = new ArrayList<>();
-	
-	@NotBlank(message="Campo obrigatório!")
+
+	@NotBlank(message = "Campo obrigatório!")
 	private String username;
-	
-	@NotBlank(message="Campo obrigatório!")
+
+	@NotBlank(message = "Campo obrigatório!")
 	private String password;
-	
-	@NotBlank(message="Campo obrigatório!")
-	@Email(message="Informe um email válido!")
+
+	@NotBlank(message = "Campo obrigatório!")
+	@Email(message = "Informe um email válido!")
 	private String email;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(
-			name = "users_roles",
-			joinColumns = @JoinColumn(
-		            name = "user_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(
-				            name = "role_id", referencedColumnName = "id"))
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Collection<Funcao> funcao;
 
 	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -58,6 +53,14 @@ public class Usuario {
 
 	public Usuario() {
 
+	}
+
+	public Double getDinheiro() {
+		return dinheiro;
+	}
+
+	public void setDinheiro(Double dinheiro) {
+		this.dinheiro = dinheiro;
 	}
 
 	public Integer getId() {
@@ -99,6 +102,7 @@ public class Usuario {
 	public void removerApostasFavoritas(Aposta aposta) {
 		this.apostasFavoritas.remove(aposta);
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -108,7 +112,7 @@ public class Usuario {
 	}
 
 	public void adicionarFuncao(Funcao role) {
-		
+
 		funcao.add(role);
 	}
 

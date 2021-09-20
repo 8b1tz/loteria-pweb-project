@@ -32,10 +32,10 @@
 
 			<th:block th:switch="${#strings.toString(aposta.status)}">
 				<div th:case="'GANHOU'" class="card-header alert-success">
-					Aposta de número: <span name="id" th:text="${aposta.id}"></span>
+					Aposta de nï¿½mero: <span name="id" th:text="${aposta.id}"></span>
 				</div>
 				<div th:case="'PERDEU'" class="card-header alert-danger">
-					Aposta de número: <span th:text="${aposta.id}"></span>
+					Aposta de nï¿½mero: <span th:text="${aposta.id}"></span>
 				</div>
 			</th:block>
 
@@ -43,7 +43,10 @@
 				<div class="row">
 					<div class="col-12 col-sm-9 mb-3">
 						<div>
-							Números apostas: <span th:text="${aposta.numeros}"></span>
+							Id: <span th:text="${aposta.id}"></span>
+						</div>
+						<div>
+							NÃºmeros apostados: <span th:text="${aposta.numeros}"></span>
 						</div>
 						<div>
 							Quem apostou: <span th:text="${aposta.usuario.username}"></span>
@@ -51,8 +54,13 @@
 						<div>
 							Status: <span th:text="${aposta.status}"></span>
 						</div>
-
-					</div>	
+					</div>
+						<div class="col-12 col-sm-3">
+						   <form action="#" th:action="@{/sorteio/{idsorteio}/aposta/{idaposta}/favoritar/(idsorteio=${sorteio.numeroDoSorteio}, idaposta=${aposta.id})}" method="POST">
+								<a class="text-success"th:if="${!aposta.isFavorito}"><input type="submit"class="text-success"value="Favoritar"></i></a>
+								<a class="text-warning"th:if="${aposta.isFavorito}"> <input type="submit"class="text-danger"value="Desfavoritar"></i></a>
+							</form>
+						</div>		
 				</div>
 			</div>
 		</div>
