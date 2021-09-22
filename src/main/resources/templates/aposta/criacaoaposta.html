@@ -37,13 +37,17 @@
     </tr>
   </tbody>
 </table>
-				
 				<div class="form-group mt-3">
 					<label>Quantidade de numeros para apostar</label> 
 					<input th:name="quantidadeform" value=0 > 
 					<button class="btn btn-success mt-3" type="submit">Next</button>
 				</div>
 			</form>
+			
+				<div class="form-group mt-3">
+					<a th:href="@{/sorteio/{idsorteio}/favoritos/(idsorteio=${sorteio.numeroDoSorteio})}"><button class="btn btn-success mt-3" type="submit">Favoritos</button></a>
+				</div>
+			
 		</div>
 	</div>
 </body>

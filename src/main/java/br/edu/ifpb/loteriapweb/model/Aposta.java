@@ -65,9 +65,6 @@ public class Aposta {
 		this.id = id;
 	}
 
-	public void setNumeros(List<Integer> numeros) {
-		this.numeros = numeros;
-	}
 
 	public Integer getId() {
 		return id;

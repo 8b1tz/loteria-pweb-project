@@ -43,11 +43,10 @@ public class ApostaController {
 		mv.setViewName("aposta/apostas");
 		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
 		Usuario usuario = usuarioRepository.findByUsername(principal.getName());
-		mv.addObject(usuario);
 		List<Aposta> apostas = sorteio.getApostas();
 		mv.addObject("apostas", apostas);
 		mv.addObject("sorteio", sorteio);
-
+		mv.addObject("usuario", usuario);
 		return mv;
 	}
 

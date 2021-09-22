@@ -15,14 +15,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import br.edu.ifpb.loteriapweb.enums.StatusAposta;
 import br.edu.ifpb.loteriapweb.model.Aposta;
+import br.edu.ifpb.loteriapweb.model.Sorteio;
 import br.edu.ifpb.loteriapweb.model.Usuario;
 import br.edu.ifpb.loteriapweb.repository.ApostaRepository;
+import br.edu.ifpb.loteriapweb.repository.SorteioRepository;
 import br.edu.ifpb.loteriapweb.repository.UsuarioRepository;
 
 @Controller
 public class UsuarioController {
 
+	@Autowired
+	private SorteioRepository sorteioRepository; 
 	@Autowired
 	private ApostaRepository apostaRepository;
 	@Autowired
@@ -31,34 +36,70 @@ public class UsuarioController {
 	private UsuarioRepository usuarioRepository;
 
 	@GetMapping("registro")
-	public String show(Model model, Usuario usuario) {
-		return "registro";
+	public ModelAndView show(ModelAndView mv, Usuario usuario) {
+		mv.setViewName("registro");
+		return mv;
 	}
 
 	@PostMapping("registro")
-	public String save(@Valid Usuario usuario, BindingResult resultadoValidacao) {
+	public ModelAndView save(@Valid Usuario usuario, BindingResult resultadoValidacao, ModelAndView mv) {
 		if (resultadoValidacao.hasErrors()) {
-			return "registro";
+			mv.setViewName("registro");
+			return mv;
 		}
 		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 		usuarioRepository.save(usuario);
-		return "redirect:/home";
+		mv.setViewName("redirect:/home");
+		return mv;
 	}
 
 	@GetMapping("favoritos")
-	public String showFavoritos(Model model) {
+	public ModelAndView showFavoritos(ModelAndView mv) {
 
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Usuario usuario = usuarioRepository.findByUsername(username);
-		model.addAttribute(usuario);
+		mv.addObject(usuario);
 		List<Aposta> apostas = usuarioRepository.findByUsername(username).getApostasFavoritas();
 		System.out.println(apostas);
-		model.addAttribute("apostas", apostas);
-
-		return "usuario/favoritos";
+		mv.addObject("apostas", apostas);
+		mv.setViewName("usuario/favoritos");
+		return mv;
 
 	}
+	 @GetMapping("sorteio/{idsorteio}/favoritos")
+	 public ModelAndView showFavoritos(ModelAndView mv, @PathVariable Integer idsorteio) {
 
+	 Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
+	 String username = SecurityContextHolder.getContext().getAuthentication().getName();
+	 List<Aposta> apostas = usuarioRepository.findByUsername(username).getApostasFavoritas();
+	 mv.addObject("apostas", apostas);
+	 mv.addObject("sorteio", sorteio);
+	 mv.addObject("usuario", usuarioRepository.findByUsername(username));
+	 mv.setViewName("usuario/favoritos");
+	 return mv;
+
+	 } 
+	 
+	 @PostMapping("sorteio/{idsorteio}/favoritos/{idaposta}")
+	 public String sorteioFavoritoCriar(@PathVariable Integer idaposta, ModelAndView mv, @PathVariable Integer idsorteio) {
+	
+	 Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
+	 String username = SecurityContextHolder.getContext().getAuthentication().getName();
+	 Usuario usuario = usuarioRepository.findByUsername(username);
+	 Aposta aposta = apostaRepository.findById(idaposta).get();
+	 List<Integer> numeros = aposta.getNumeros();
+	 Aposta apostinha = new Aposta();
+	 numeros.forEach(n -> apostinha.adicionarNumero(n));
+	 apostinha.setIsFavorito(false);
+	 apostinha.setSorteio(sorteio);
+	 apostinha.setStatus(StatusAposta.PARTICIPANDO);
+	 apostinha.setUsuario(usuario);
+	 sorteio.adicionarAposta(apostinha);
+	 apostaRepository.save(apostinha);
+	 
+	 return "redirect:/sorteio/" + idsorteio + "/apostas/";
+	 
+	 } 
 	@PostMapping("sorteio/{idsorteio}/aposta/{idaposta}/favoritar")
 	public String saveFavoritos(ModelAndView mv, @PathVariable Integer idsorteio, @PathVariable Integer idaposta) {
 

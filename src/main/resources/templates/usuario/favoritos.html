@@ -4,18 +4,14 @@
 	<div th:replace="~{fragment :: menu}"></div>
 	<div class="container">
 		<div th:replace="~{fragment :: titulo('Apostas Favoritas')}"></div>
-	
 	<div class="card mb-3 mt-3" th:each="aposta : ${apostas}">
-
-		<th:block th:switch="${#strings.toString(aposta.status)}">
-			<div th:case="'GANHOU'" class="card-header alert-success">
-				Aposta de número: <span th:text="${aposta.id}"></span>
+	
+		<form th:if ="${#httpServletRequest.requestURI != '/favoritos'}" class="card-body" th:action="@{/sorteio/{idsorteio}/favoritos/{idaposta}/(idsorteio=${sorteio.numeroDoSorteio}, idaposta=${aposta.id})}" method="POST">
+			<div>
+				<button type = "submit">Fazer Aposta</button>
 			</div>
-			<div th:case="'PERDEU'" class="card-header alert-danger">
-				Aposta de número: <span th:text="${aposta.id}"></span>
-			</div>
-		</th:block>
-
+		</form>
+	
 		<div class="card-body">
 			<div class="row ">
 				<div class="col-12 col-sm-9 ">
@@ -28,8 +24,10 @@
 				</div>
 				<div class="col-12 col-sm-3"></div>
 			</div>
+			
 		</div>
 	</div>
+	</form>
 	</div>
 </body>
 </html>
