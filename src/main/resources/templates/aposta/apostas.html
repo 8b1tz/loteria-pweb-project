@@ -56,7 +56,7 @@
 						</div>
 					</div>
 						<div class="col-12 col-sm-3">
-						   <form action="#" th:action="@{/sorteio/{idsorteio}/aposta/{idaposta}/favoritar/(idsorteio=${sorteio.numeroDoSorteio}, idaposta=${aposta.id})}" method="POST">
+						   <form th:if="${#authentication.principal.username == aposta.usuario.username}" action="#" th:action="@{/sorteio/{idsorteio}/aposta/{idaposta}/favoritar/(idsorteio=${sorteio.numeroDoSorteio}, idaposta=${aposta.id})}" method="POST">
 								<a class="text-success"th:if="${!aposta.isFavorito}"><input type="submit"class="text-success"value="Favoritar"></i></a>
 								<a class="text-warning"th:if="${aposta.isFavorito}"> <input type="submit"class="text-danger"value="Desfavoritar"></i></a>
 							</form>
