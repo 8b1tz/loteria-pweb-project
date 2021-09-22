@@ -32,7 +32,7 @@ public class UsuarioController {
 	@Autowired
 	private FuncaoRepository funcaoRepository;
 	@Autowired
-	private SorteioRepository sorteioRepository; 
+	private SorteioRepository sorteioRepository;
 	@Autowired
 	private ApostaRepository apostaRepository;
 	@Autowired
@@ -54,10 +54,12 @@ public class UsuarioController {
 		}
 		Usuario usuario;
 		Collection<Funcao> funcoes = funcaoRepository.findByName("ROLE_USER");
-		if(funcoes.isEmpty()) {
-			usuario = new Usuario(100.0, user.getUsername(),passwordEncoder.encode(user.getPassword()),  user.getEmail(), Arrays.asList(new Funcao("ROLE_USER")));
-		}else {
-			usuario = new Usuario(100.0, user.getUsername(),passwordEncoder.encode(user.getPassword()), user.getEmail(), funcoes);
+		if (funcoes.isEmpty()) {
+			usuario = new Usuario(100.0, user.getUsername(), passwordEncoder.encode(user.getPassword()),
+					user.getEmail(), Arrays.asList(new Funcao("ROLE_USER")));
+		} else {
+			usuario = new Usuario(100.0, user.getUsername(), passwordEncoder.encode(user.getPassword()),
+					user.getEmail(), funcoes);
 		}
 		usuarioRepository.save(usuario);
 		mv.setViewName("redirect:/home");
@@ -77,40 +79,70 @@ public class UsuarioController {
 		return mv;
 
 	}
-	 @GetMapping("sorteio/{idsorteio}/favoritos")
-	 public ModelAndView showFavoritos(ModelAndView mv, @PathVariable Integer idsorteio) {
 
-	 Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
-	 String username = SecurityContextHolder.getContext().getAuthentication().getName();
-	 List<Aposta> apostas = usuarioRepository.findByUsername(username).getApostasFavoritas();
-	 mv.addObject("apostas", apostas);
-	 mv.addObject("sorteio", sorteio);
-	 mv.addObject("usuario", usuarioRepository.findByUsername(username));
-	 mv.setViewName("usuario/favoritos");
-	 return mv;
+	@GetMapping("sorteio/{idsorteio}/favoritos")
+	public ModelAndView showFavoritos(ModelAndView mv, @PathVariable Integer idsorteio) {
 
-	 } 
-	 
-	 @PostMapping("sorteio/{idsorteio}/favoritos/{idaposta}")
-	 public String sorteioFavoritoCriar(@PathVariable Integer idaposta, ModelAndView mv, @PathVariable Integer idsorteio) {
-	
-	 Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
-	 String username = SecurityContextHolder.getContext().getAuthentication().getName();
-	 Usuario usuario = usuarioRepository.findByUsername(username);
-	 Aposta aposta = apostaRepository.findById(idaposta).get();
-	 List<Integer> numeros = aposta.getNumeros();
-	 Aposta apostinha = new Aposta();
-	 numeros.forEach(n -> apostinha.adicionarNumero(n));
-	 apostinha.setIsFavorito(false);
-	 apostinha.setSorteio(sorteio);
-	 apostinha.setStatus(StatusAposta.PARTICIPANDO);
-	 apostinha.setUsuario(usuario);
-	 sorteio.adicionarAposta(apostinha);
-	 apostaRepository.save(apostinha);
-	 
-	 return "redirect:/sorteio/" + idsorteio + "/apostas/";
-	 
-	 } 
+		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		List<Aposta> apostas = usuarioRepository.findByUsername(username).getApostasFavoritas();
+		mv.addObject("apostas", apostas);
+		mv.addObject("sorteio", sorteio);
+		mv.addObject("usuario", usuarioRepository.findByUsername(username));
+		mv.setViewName("usuario/favoritos");
+		return mv;
+
+	}
+
+	@PostMapping("sorteio/{idsorteio}/favoritos/{idaposta}")
+	public String sorteioFavoritoCriar(@PathVariable Integer idaposta, ModelAndView mv,
+			@PathVariable Integer idsorteio) {
+
+		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Usuario usuario = usuarioRepository.findByUsername(username);
+		Aposta aposta = apostaRepository.findById(idaposta).get();
+		List<Integer> numeros = aposta.getNumeros();
+		Aposta apostinha = new Aposta();
+		numeros.forEach(n -> apostinha.adicionarNumero(n));
+		
+		Integer quantidade = numeros.size();
+		
+		if (quantidade == 6) {
+			usuario.setDinheiro(usuario.getDinheiro() - 3.00);
+		}
+
+		if (quantidade == 7) {
+			usuario.setDinheiro(usuario.getDinheiro() - 15.00);
+
+		}
+
+		if (quantidade == 8) {
+			usuario.setDinheiro(usuario.getDinheiro() - 90.00);
+
+		}
+
+		if (quantidade == 9) {
+			usuario.setDinheiro(usuario.getDinheiro() - 300.00);
+
+		}
+
+		if (quantidade == 10) {
+			usuario.setDinheiro(usuario.getDinheiro() - 1500.00);
+		}
+
+		apostinha.setIsFavorito(false);
+		apostinha.setSorteio(sorteio);
+		apostinha.setStatus(StatusAposta.PARTICIPANDO);
+		apostinha.setUsuario(usuario);
+
+		sorteio.adicionarAposta(apostinha);
+		apostaRepository.save(apostinha);
+
+		return "redirect:/sorteio/" + idsorteio + "/apostas/";
+
+	}
+
 	@PostMapping("sorteio/{idsorteio}/aposta/{idaposta}/favoritar")
 	public String saveFavoritos(ModelAndView mv, @PathVariable Integer idsorteio, @PathVariable Integer idaposta) {
 

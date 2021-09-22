@@ -128,13 +128,13 @@ public class ApostaController {
 		}
 		if (quantidade >= 9) {
 			numeros.add(num9);
-			if (quantidade == 7) {
+			if (quantidade == 9) {
 				usuario.setDinheiro(usuario.getDinheiro() - 300.00);
 			}
 		}
 		if (quantidade == 10) {
 			numeros.add(num10);
-			if (quantidade == 7) {
+			if (quantidade == 10) {
 				usuario.setDinheiro(usuario.getDinheiro() - 1500.00);
 			}
 		}
