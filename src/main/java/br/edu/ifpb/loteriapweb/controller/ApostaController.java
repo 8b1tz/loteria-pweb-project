@@ -118,27 +118,47 @@ public class ApostaController {
 		numeros.add(num6);
 
 		if (quantidade == 6) {
+			if (usuario.getDinheiro() < 3.00) {
+				model.addAttribute("errorMessage", "Você não tem esse dinheiro!");
+				return "aposta/formcriar";
+			}
 			usuario.setDinheiro(usuario.getDinheiro() - 3.00);
 		}
 		if (quantidade >= 7) {
+			if (usuario.getDinheiro() < 15.00) {
+				model.addAttribute("errorMessage", "Você não tem esse dinheiro!");
+				return "aposta/formcriar";
+			}
 			numeros.add(num7);
 			if (quantidade == 7) {
 				usuario.setDinheiro(usuario.getDinheiro() - 15.00);
 			}
 		}
 		if (quantidade >= 8) {
+			if (usuario.getDinheiro() < 90.00) {
+				model.addAttribute("errorMessage", "Você não tem esse dinheiro!");
+				return "aposta/formcriar";
+			}
 			numeros.add(num8);
 			if (quantidade == 8) {
 				usuario.setDinheiro(usuario.getDinheiro() - 90.00);
 			}
 		}
 		if (quantidade >= 9) {
+			if (usuario.getDinheiro() < 300.00) {
+				model.addAttribute("errorMessage", "Você não tem esse dinheiro!");
+				return "aposta/formcriar";
+			}
 			numeros.add(num9);
 			if (quantidade == 9) {
 				usuario.setDinheiro(usuario.getDinheiro() - 300.00);
 			}
 		}
 		if (quantidade == 10) {
+			if (usuario.getDinheiro() < 1500.00) {
+				model.addAttribute("errorMessage", "Você não tem esse dinheiro!");
+				return "aposta/formcriar";
+			}
 			numeros.add(num10);
 			if (quantidade == 10) {
 				usuario.setDinheiro(usuario.getDinheiro() - 1500.00);
@@ -150,7 +170,6 @@ public class ApostaController {
 
 				if ((numeros.get(i) <= 60) && (numeros.get(i) >= 1)) {
 					if ((numeros.get(i) == numeros.get(j)) && (i != j)) {
-						System.out.println("entrei");
 						model.addAttribute("errorMessage", "Não é permitido números repetidos");
 						return "aposta/formcriar";
 
@@ -171,7 +190,7 @@ public class ApostaController {
 			if (numerosValidos.size() >= 6 && numerosValidos.size() <= 10) {
 				aposta.adicionarNumero(numerosValidos.get(i));
 			} else {
-				model.addAttribute("Verifique se suas apostas estão seguindo as regras");
+				model.addAttribute("errorMessage", "Verifique se suas apostas estão seguindo as regras");
 				return "aposta/formcriar";
 			}
 		}

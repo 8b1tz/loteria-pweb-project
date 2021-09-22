@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,8 +53,9 @@ public class UsuarioController {
 			mv.setViewName("registro");
 			return mv;
 		}
-		Usuario usuario;
+		Usuario usuario = new Usuario();
 		Collection<Funcao> funcoes = funcaoRepository.findByName("ROLE_USER");
+
 		if (funcoes.isEmpty()) {
 			usuario = new Usuario(100.0, user.getUsername(), passwordEncoder.encode(user.getPassword()),
 					user.getEmail(), Arrays.asList(new Funcao("ROLE_USER")));
@@ -61,6 +63,7 @@ public class UsuarioController {
 			usuario = new Usuario(100.0, user.getUsername(), passwordEncoder.encode(user.getPassword()),
 					user.getEmail(), funcoes);
 		}
+
 		usuarioRepository.save(usuario);
 		mv.setViewName("redirect:/home");
 		return mv;
@@ -160,5 +163,17 @@ public class UsuarioController {
 			usuarioRepository.save(usuario);
 		}
 		return "redirect:/sorteio/" + idsorteio + "/apostas";
+	}
+	
+	@GetMapping("minhasapostas")
+	public String listarMinhasApostas(Model model) {
+		
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Usuario usuario = usuarioRepository.findByUsername(username);
+		model.addAttribute("usuario",usuario);
+		List<Aposta> apostasDoUsuario = usuario.getApostas();
+		model.addAttribute("apostas",apostasDoUsuario);
+		
+		return "usuario/minhasapostas";
 	}
 }

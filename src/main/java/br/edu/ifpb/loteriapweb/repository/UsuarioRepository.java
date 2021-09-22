@@ -10,8 +10,10 @@ import br.edu.ifpb.loteriapweb.model.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 
-	@Query("SELECT u from Usuario u where u.username = :username")
-	Usuario findByUsername(@Param("username")String username);
-
+		@Query("SELECT u from Usuario u where u.username = :username")
+		Usuario findByUsername(@Param("username")String username);
+	
+		 @Query("SELECT u from Usuario u where u.email = :email")
+		 Usuario findByEmail(@Param("email")String email);
 	
 }

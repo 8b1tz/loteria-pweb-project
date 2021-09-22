@@ -32,10 +32,10 @@
 
 			<th:block th:switch="${#strings.toString(aposta.status)}">
 				<div th:case="'GANHOU'" class="card-header alert-success">
-					Aposta de n�mero: <span name="id" th:text="${aposta.id}"></span>
+					Aposta de número: <span name="id" th:text="${aposta.id}"></span>
 				</div>
 				<div th:case="'PERDEU'" class="card-header alert-danger">
-					Aposta de n�mero: <span th:text="${aposta.id}"></span>
+					Aposta de número: <span th:text="${aposta.id}"></span>
 				</div>
 			</th:block>
 
