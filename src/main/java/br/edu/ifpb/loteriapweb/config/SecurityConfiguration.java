@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/sorteio/criacao").hasRole("ADMIN")
-				.antMatchers("/sorteio/2/formularioaposta/", "/sorteio/2/numerossorteio/").hasRole("USER")
+				.antMatchers("/sorteio/2/formularioaposta/", "/sorteio/2/numerossorteio/", "/favoritos").hasRole("USER")
 				.antMatchers("/registro**", "/js/**", "/css/**", "/img/**").permitAll().anyRequest().authenticated()
 				.and().formLogin().loginPage("/login").permitAll().defaultSuccessUrl("/home").and().logout()
 				.invalidateHttpSession(true).clearAuthentication(true)

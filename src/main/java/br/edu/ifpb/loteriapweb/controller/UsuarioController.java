@@ -1,5 +1,7 @@
 package br.edu.ifpb.loteriapweb.controller;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -8,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,15 +18,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import br.edu.ifpb.loteriapweb.enums.StatusAposta;
 import br.edu.ifpb.loteriapweb.model.Aposta;
+import br.edu.ifpb.loteriapweb.model.Funcao;
 import br.edu.ifpb.loteriapweb.model.Sorteio;
 import br.edu.ifpb.loteriapweb.model.Usuario;
 import br.edu.ifpb.loteriapweb.repository.ApostaRepository;
+import br.edu.ifpb.loteriapweb.repository.FuncaoRepository;
 import br.edu.ifpb.loteriapweb.repository.SorteioRepository;
 import br.edu.ifpb.loteriapweb.repository.UsuarioRepository;
 
 @Controller
 public class UsuarioController {
 
+	@Autowired
+	private FuncaoRepository funcaoRepository;
 	@Autowired
 	private SorteioRepository sorteioRepository; 
 	@Autowired
@@ -42,12 +47,18 @@ public class UsuarioController {
 	}
 
 	@PostMapping("registro")
-	public ModelAndView save(@Valid Usuario usuario, BindingResult resultadoValidacao, ModelAndView mv) {
+	public ModelAndView save(@Valid Usuario user, BindingResult resultadoValidacao, ModelAndView mv) {
 		if (resultadoValidacao.hasErrors()) {
 			mv.setViewName("registro");
 			return mv;
 		}
-		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+		Usuario usuario;
+		Collection<Funcao> funcoes = funcaoRepository.findByName("ROLE_USER");
+		if(funcoes.isEmpty()) {
+			usuario = new Usuario(100.0, user.getUsername(),passwordEncoder.encode(user.getPassword()),  user.getEmail(), Arrays.asList(new Funcao("ROLE_USER")));
+		}else {
+			usuario = new Usuario(100.0, user.getUsername(),passwordEncoder.encode(user.getPassword()), user.getEmail(), funcoes);
+		}
 		usuarioRepository.save(usuario);
 		mv.setViewName("redirect:/home");
 		return mv;

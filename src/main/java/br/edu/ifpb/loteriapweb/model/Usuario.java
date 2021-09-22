@@ -55,6 +55,17 @@ public class Usuario {
 
 	}
 
+	public Usuario(Double dinheiro, @NotBlank(message = "Campo obrigatório!") String username,
+			@NotBlank(message = "Campo obrigatório!") String password,
+			@NotBlank(message = "Campo obrigatório!") @Email(message = "Informe um email válido!") String email,
+			Collection<Funcao> funcao) {
+		this.dinheiro = dinheiro;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.funcao = funcao;
+	}
+
 	public Double getDinheiro() {
 		return dinheiro;
 	}
