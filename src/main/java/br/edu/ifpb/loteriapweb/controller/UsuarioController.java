@@ -105,9 +105,9 @@ public class UsuarioController {
 		List<Integer> numeros = aposta.getNumeros();
 		Aposta apostinha = new Aposta();
 		numeros.forEach(n -> apostinha.adicionarNumero(n));
-		
+
 		Integer quantidade = numeros.size();
-		
+
 		if (quantidade == 6) {
 			usuario.setDinheiro(usuario.getDinheiro() - 3.00);
 		}

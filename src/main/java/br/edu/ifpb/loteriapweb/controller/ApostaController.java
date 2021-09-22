@@ -71,7 +71,7 @@ public class ApostaController {
 		mv.setViewName("aposta/criacaoaposta");
 		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
 		Usuario usuario = usuarioRepository.findByUsername(principal.getName());
-		mv.addObject(usuario);
+		mv.addObject("usuario", usuario);
 		mv.addObject("sorteio", sorteio);
 
 		return mv;
@@ -81,7 +81,7 @@ public class ApostaController {
 	public ModelAndView quantidade(@PathVariable Integer idsorteio, ModelAndView mv, Integer quantidadeform,
 			Principal principal) {
 		Usuario usuario = usuarioRepository.findByUsername(principal.getName());
-		mv.addObject(usuario);
+		mv.addObject("usuario", usuario);
 		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
 		mv.addObject("sorteio", sorteio);
 		quantidade = quantidadeform;
@@ -92,25 +92,31 @@ public class ApostaController {
 	}
 
 	@RequestMapping(value = "sorteio/{idsorteio}/criaraposta", method = RequestMethod.POST)
-	public String saveaposta(@PathVariable Integer idsorteio, ModelAndView model, Integer num1, Integer num2,
-			Integer num3, Integer num4, Integer num5, Integer num6, Integer num7, Integer num8, Integer num9,
-			Integer num10, Principal principal) {
-		Double pagamento = 0.0;
+	public String saveaposta(@PathVariable Integer idsorteio, Model model, Integer num1, Integer num2, Integer num3,
+			Integer num4, Integer num5, Integer num6, Integer num7, Integer num8, Integer num9, Integer num10)
+			throws Exception {
+
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Usuario usuario = usuarioRepository.findByUsername(username);
+		model.addAttribute("usuario", usuario);
+
 		Sorteio sorteio = sorteioRepository.findById(idsorteio).get();
+		model.addAttribute("sorteio", sorteio);
+		model.addAttribute("quantidade", quantidade);
+
+		ArrayList<Integer> numeros = new ArrayList();
+		ArrayList<Integer> numerosValidos = new ArrayList();
 
 		Aposta aposta = new Aposta();
 		aposta.setSorteio(sorteio);
-		ArrayList<Integer> numeros = new ArrayList();
-		ArrayList<Integer> numerosValidos = new ArrayList();
-		Usuario usuario = usuarioRepository.findByUsername(principal.getName());
-		model.addObject(usuario);
+
 		numeros.add(num1);
 		numeros.add(num2);
 		numeros.add(num3);
 		numeros.add(num4);
 		numeros.add(num5);
 		numeros.add(num6);
-		
+
 		if (quantidade == 6) {
 			usuario.setDinheiro(usuario.getDinheiro() - 3.00);
 		}
@@ -144,13 +150,19 @@ public class ApostaController {
 
 				if ((numeros.get(i) <= 60) && (numeros.get(i) >= 1)) {
 					if ((numeros.get(i) == numeros.get(j)) && (i != j)) {
-						return "redirect:/sorteio/" + idsorteio + "/apostas";
+						System.out.println("entrei");
+						model.addAttribute("errorMessage", "Não é permitido números repetidos");
+						return "aposta/formcriar";
+
 					}
 				}
 
 			}
-			if ((numeros.get(i) <= 60) && (numeros.get(i) >= 1)) {
+			if (numeros.get(i) <= 60 && numeros.get(i) >= 1) {
 				numerosValidos.add(numeros.get(i));
+			} else {
+				model.addAttribute("errorMessage", "Não é permitido números menores que 1 ou maiores que 60");
+				return "aposta/formcriar";
 			}
 		}
 
@@ -159,17 +171,26 @@ public class ApostaController {
 			if (numerosValidos.size() >= 6 && numerosValidos.size() <= 10) {
 				aposta.adicionarNumero(numerosValidos.get(i));
 			} else {
-				return "redirect:/sorteio/" + idsorteio + "/apostas";
+				model.addAttribute("Verifique se suas apostas estão seguindo as regras");
+				return "aposta/formcriar";
 			}
 		}
-		model.addObject(usuario);
 
-		aposta.setUsuario(usuario);
-		aposta.setStatus(StatusAposta.PARTICIPANDO);
-		apostaRepository.save(aposta);
-		sorteio.adicionarAposta(aposta);
-		sorteioRepository.save(sorteio);
+		if (numerosValidos.size() >= 6 && numerosValidos.size() <= 10) {
+			model.addAttribute(usuario);
+
+			aposta.setUsuario(usuario);
+			aposta.setStatus(StatusAposta.PARTICIPANDO);
+			sorteio.adicionarAposta(aposta);
+
+			usuarioRepository.save(usuario);
+			apostaRepository.save(aposta);
+			sorteioRepository.save(sorteio);
+
+		}
+
 		return "redirect:/sorteio/" + idsorteio + "/apostas";
+
 	}
 
 	@RequestMapping(value = "sorteio/{idsorteio}/sortearaposta", method = RequestMethod.POST)
@@ -180,10 +201,8 @@ public class ApostaController {
 		List<Aposta> apostas = sorteio.getApostas();
 		Integer acertos = 0;
 
-		// Está fixo em 1,2,3,4,5,6 por enquanto... só pra testes,
-		// o código com random está comentádo no fim do arquivo !
-		for (int i = 1; i < 7; i++) {
-			int numero = i;
+		for (int i = 0; i < 6; i++) {
+			int numero = aleatoriar(1, 60);
 			sorteio.adicionarDezenasSorteadas(numero);
 			resultado.add(numero);
 		}
@@ -235,8 +254,3 @@ public class ApostaController {
 		return random.nextInt((maximo - minimo) + 1) + minimo;
 	}
 }
-
-/*
- * for(int i = 0; i < 6; i++) { int numero = aleatoriar(1,60);
- * sorteio.adicionarDezenasSorteadas(numero); resultado.add(numero); }
- */

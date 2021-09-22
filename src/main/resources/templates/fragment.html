@@ -44,6 +44,7 @@ width: 100px;
 				<a onclick="document.querySelector('#form-login').submit()"  class = "dropdown-item text-danger" href="#">Logout</a>
 			<form id="form-login" th:action="@{/logout}" method="post"></form>
 			</div>
+		<span sec:authentication="principal.username" ></span>
 		</div>
 	</div>
 </div>

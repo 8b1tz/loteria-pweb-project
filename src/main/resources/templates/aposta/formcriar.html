@@ -6,6 +6,9 @@
 		<div th:replace= "~{fragment :: titulo('Criacao de aposta')}"></div>
 		<div class="card mt-3">
 		<form form  class="card-body" th:action="@{/sorteio/{id}/criaraposta/(id=${sorteio.numeroDoSorteio})}" method="POST">
+				 
+				 <span class="text-danger" th:if="${errorMessage}"  th:text="${errorMessage}">Error</span>
+				
 				<h3>Digite seus valores: </h3>
 				<div class="form-group mt-3">
 					<label>1° Número: </label> 

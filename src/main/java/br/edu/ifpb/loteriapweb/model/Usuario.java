@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "user")
@@ -34,6 +35,8 @@ public class Usuario {
 	@Column(nullable = false)
 	private List<Aposta> apostasFavoritas = new ArrayList<>();
 
+	@Size(max= 8, message = "Campo com no máximo 8 caracteres")
+	@Size(min = 4, message=" Campo com no minímo 4 caracteres")
 	@NotBlank(message = "Campo obrigatório!")
 	private String username;
 
