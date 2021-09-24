@@ -7,12 +7,12 @@
 		<div class="card mt-3">
 			<form th:object="${sorteio}" class="card-body" th:action="@{criar}" method="POST">
 				<div class="form-group mt-3">
-					<label>Valor que os vencedores ganhar·</label> 
+					<label>Valor que os vencedores ganhar√°</label> 
 					<input th:field="*{valorDoPremio}"  th:errorClass="is-invalid" class="form-control" placeholder="valor do pr√™mio"> 
 					  <span th:if="${#fields.hasErrors('valorDoPremio')}" th:errors="*{valorDoPremio}" class="invalid-feedback"></span>
 				</div>
 				<div class="form-group mt-3">
-					<label>AtÈ quando o sorteio vai estar· aberto</label> <input  th:errorClass="is-invalid" th:field="*{dataParaFim}" class="form-control" placeholder="dd/mm/yyyy"> 
+					<label>At√© quando o sorteio vai estar√° aberto</label> <input  th:errorClass="is-invalid" th:field="*{dataParaFim}" class="form-control" placeholder="dd/mm/yyyy"> 
 				 	<span th:if="${#fields.hasErrors('dataParaFim')}" th:errors="*{dataParaFim}" class="invalid-feedback" ></span>
 				</div>
 				<button class="btn btn-success mt-3" type="submit">Criar</button>
