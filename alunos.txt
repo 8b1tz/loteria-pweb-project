@@ -2,3 +2,20 @@ Membros da Equipe StarsBitz:
 
 - Ana Julia Oliveira Lins  - Matrícula: 20191370002
 - Yohanna de Oliveira Cavalcanti - Matrícula: 20191370003
+
+** Obs: Como o administrador vai ser criado manualmente no banco, está aqui os códigos
+para inserção. Caso queira usar em um usuário já criado, abaixo do insert tem o update.
+_______________________________
+|CRIA A FUNÇÃO "ROLE_ADMIN"    |
+|______________________________|
+INSERT INTO role (id, name)        
+VALUES (2, "ROLE_ADMIN");
+
+________________________________
+| ATUALIZA  A FUNCAO DO USUÁRIO |
+|_______________________________|
+UPDATE users_roles
+SET role_id = 2
+WHERE user_id = 1
+
+link do vídeo explicando o projeto: https://www.youtube.com/watch?v=GQ4K4f2caN8
